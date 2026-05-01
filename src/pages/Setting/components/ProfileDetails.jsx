@@ -27,7 +27,7 @@ const ProfileDetails = () => {
           {/* avatar */}
           <div className="relative shrink-0">
             <img
-              src="src/assets/bg/Another anime girl in the rain.jpg"
+              src="/images/Another anime girl in the rain.jpg"
               alt=""
               className="w-20 h-20 rounded-2xl object-cover border border-white/20"
             />
