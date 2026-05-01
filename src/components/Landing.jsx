@@ -17,7 +17,7 @@ const Landing = ({
     <div
       className="Lnading flex min-h-screen w-full overflow-x-hidden bg-cover bg-center bg-no-repeat "
       style={{
-        backgroundImage: "url('/images/new (1).jpg')",
+        backgroundImage: "url('/images/landing-bg.jpg')",
       }}
     >
       <Silder isOpen={isOpen} setIsOpen={setIsOpen} />
