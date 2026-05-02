@@ -328,7 +328,6 @@ const Profile = () => {
 
               leading-tight
             "
-            style={{ fontFamily: "'Syne', sans-serif" }}
           >
             {form.name || "—"}
           </h2>
@@ -363,7 +362,6 @@ const Profile = () => {
                     font-black
                     leading-none
                   "
-                  style={{ fontFamily: "'Syne', sans-serif" }}
                 >
                   {value}
                 </span>
@@ -483,7 +481,6 @@ const Profile = () => {
 
               active:scale-[0.99]
             "
-            style={{ fontFamily: "'Syne', sans-serif" }}
           >
             <Save size={16} />
             Save Changes
