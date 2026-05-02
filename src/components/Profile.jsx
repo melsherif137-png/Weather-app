@@ -143,6 +143,7 @@ const Profile = () => {
     getWeather,
     STATS,
     FloatingField,
+    initials,
   } = useProfile();
 
   const temp = Math.round(current?.main?.temp ?? 28);
@@ -187,13 +188,6 @@ const Profile = () => {
 
     reader.readAsDataURL(file);
   };
-
-  const initials = form.name
-    .split(" ")
-    .map((w) => w[0] ?? "")
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
 
   return (
     <div

@@ -166,6 +166,11 @@ const ProfileContextProvider = ({ children }) => {
   });
 
   const [saved, setSaved] = useState(false);
+  const initials = form.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
 
   return (
     <ProfileState.Provider
@@ -179,6 +184,7 @@ const ProfileContextProvider = ({ children }) => {
         getWeather,
         STATS,
         FloatingField,
+        initials,
       }}
     >
       {children}

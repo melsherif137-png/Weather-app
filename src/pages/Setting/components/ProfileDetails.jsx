@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useProfile } from "../../../context/ProfileContext";
 const ProfileDetails = () => {
-  const { form, setForm, avatar, setAvatar } = useProfile();
+  const { form, setForm, avatar, setAvatar, initials } = useProfile();
   const UserData = [
     {
       top: "Location",
@@ -28,19 +28,46 @@ const ProfileDetails = () => {
         <div className="flex gap-4 items-center">
           {/* avatar */}
           <div className="relative shrink-0">
-            {avatar ? (
-              <img
-                src={avatar}
-                alt="avatar"
-                className="w-18 h-18 lg:w-22 lg:h-22 rounded-2xl object-cover border border-white/20"
-              />
-            ) : (
-              initials
-            )}
-            {/* online dot */}
+            <div
+              className="
+                w-[80px] h-[80px]
+                sm:w-[100px] sm:h-[100px]
+                xl:w-[115px] xl:h-[115px]
 
+                rounded-full
+                overflow-hidden
+
+                bg-gradient-to-br
+                from-blue-400/15
+                to-purple-500/15
+
+                border border-white/10
+
+                flex items-center justify-center
+
+                text-white/90
+                text-[1.8rem]
+                font-black
+
+                transition-transform duration-200
+                group-hover:scale-[1.03]
+              "
+            >
+              {avatar ? (
+                <img
+                  src={avatar}
+                  alt="avatar"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                initials
+              )}
+            </div>
+            {/* online dot */}
+            {/* className="w-18 h-18 lg:w-22 lg:h-22 rounded-2xl object-cover border
+            border-white/20" */}
             <span
-              className="absolute bottom-1.5 right-1.5 lg:w-2.5 lg:h-2.5 w-2 h-2 rounded-full
+              className="absolute bottom-2.5 right-2.5 lg:w-2.5 lg:h-2.5 w-2 h-2 rounded-full
                          bg-emerald-400 border-2 border-white/20"
             />
           </div>
