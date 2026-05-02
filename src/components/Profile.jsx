@@ -194,7 +194,7 @@ const Profile = () => {
       className="
         w-full min-h-fit
         bg-[#0b1120]/60 backdrop-blur-xl
-        m-4
+        lg:m-4
         rounded-3xl
         px-3 py-4
         sm:px-5 sm:py-5
