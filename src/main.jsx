@@ -5,13 +5,16 @@ import App from "./App.jsx";
 import { WeatherProvider } from "./context/WeatherState.jsx";
 import { HashRouter } from "react-router-dom";
 import { SearchContextProvider } from "./context/SearchContext.jsx";
+import ProfileContextProvider from "./context/ProfileContext.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <WeatherProvider>
       <SearchContextProvider>
-        <HashRouter>
-          <App />
-        </HashRouter>
+        <ProfileContextProvider>
+          <HashRouter>
+            <App />
+          </HashRouter>
+        </ProfileContextProvider>
       </SearchContextProvider>
     </WeatherProvider>
   </StrictMode>,

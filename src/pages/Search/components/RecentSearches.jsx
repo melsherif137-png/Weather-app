@@ -13,6 +13,8 @@ const RecentSearches = () => {
   return (
     <div
       className="
+      min-h-screen
+      overflow-hidden
         text-white mt-6
         px-4 sm:px-5 lg:px-8
         py-5 sm:py-6
@@ -52,6 +54,7 @@ const RecentSearches = () => {
             {recentCities.length > 0 && (
               <div
                 className="
+                min-h-full
                   px-3 py-1
                   rounded-xl
                   text-indigo-300
@@ -94,6 +97,7 @@ const RecentSearches = () => {
       {recentCities.length === 0 ? (
         <div
           className="
+          min-h-full
             text-center
             py-16
             rounded-3xl

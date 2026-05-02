@@ -34,14 +34,6 @@ export const WeatherProvider = ({ children }) => {
   const [airQuality, setAirQuality] = useState(null);
   const [nearbyCities, setNearbyCities] = useState([]);
 
-  // =========================
-  // LOCATION STATE (GPS)
-  // =========================
-  // const [myLocationWeather, setMyLocationWeather] = useState({
-  //   current: null,
-  //   forecast: null,
-  // });
-
   const [calenderWeather, setCalenderWeather] = useState([]);
 
   // =========================
@@ -59,6 +51,7 @@ export const WeatherProvider = ({ children }) => {
   // =====================================================
   // 🔥 MASTER FUNCTION (SEARCH / CITY / COORDS)
   // =====================================================
+
   const loadWeather = async (searchTarget = null) => {
     try {
       setLoading(true);
@@ -162,6 +155,7 @@ export const WeatherProvider = ({ children }) => {
 
         const data = await getWeatherByCoords(location.lat, location.lon);
         setCurrent(data);
+        console.log(data);
 
         const dailyForecast = await getDailyForecast(
           location.lat,

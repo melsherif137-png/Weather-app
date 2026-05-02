@@ -1,10 +1,12 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
+import { useProfile } from "../../../context/ProfileContext";
 const ProfileDetails = () => {
+  const { form, setForm, avatar, setAvatar } = useProfile();
   const UserData = [
     {
       top: "Location",
-      bottom: "Reykjavík, IS",
+      bottom: ` ${form.location || "__"}`,
     },
     {
       top: "Joined",
@@ -17,7 +19,7 @@ const ProfileDetails = () => {
   ];
   return (
     <div
-      className="w-full max-w-[750px] min-h-[300px] p-6 sm:p-8 rounded-3xl 
+      className="w-full max-w-[750px] min-h-[300px] p-3 sm:p-8 rounded-3xl 
                 bg-white/5 backdrop-blur-2xl border border-white/10
                 shadow-2xl shadow-black/20"
     >
@@ -26,28 +28,33 @@ const ProfileDetails = () => {
         <div className="flex gap-4 items-center">
           {/* avatar */}
           <div className="relative shrink-0">
-            <img
-              src="/images/Another anime girl in the rain.jpg"
-              alt=""
-              className="w-20 h-20 rounded-2xl object-cover border border-white/20"
-            />
+            {avatar ? (
+              <img
+                src={avatar}
+                alt="avatar"
+                className="w-18 h-18 lg:w-22 lg:h-22 rounded-2xl object-cover border border-white/20"
+              />
+            ) : (
+              initials
+            )}
             {/* online dot */}
+
             <span
-              className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 rounded-full
+              className="absolute bottom-1.5 right-1.5 lg:w-2.5 lg:h-2.5 w-2 h-2 rounded-full
                          bg-emerald-400 border-2 border-white/20"
             />
           </div>
 
           <div>
-            <h1 className="text-white text-xl sm:text-2xl font-bold tracking-wide leading-tight">
-              Mohamed ELsherif
+            <h1 className="text-white text-md lg:text-2xl font-bold tracking-wide leading-tight">
+              {form.name || "__"}
             </h1>
-            <p className="text-gray-400 text-xs mt-0.5 tracking-wide">
-              melsherif137@gmail.com
+            <p className="text-gray-400 text-[10px] lg:xs mt-0.5 tracking-wide">
+              {form.email || "__"}
             </p>
             {/* badge */}
             <span
-              className="inline-block mt-2 text-[10px] font-semibold tracking-widest uppercase
+              className="inline-block mt-2 lg:text-xs text-[9px] font-semibold tracking-widest uppercase
                          bg-indigo-500/20 text-indigo-300 border border-indigo-400/30
                          px-2.5 py-0.5 rounded-full"
             >
@@ -55,19 +62,20 @@ const ProfileDetails = () => {
             </span>
           </div>
         </div>
-
-        <button
-          className="shrink-0 text-xs font-semibold tracking-wide uppercase
+        <Link to={"./profile"}>
+          <button
+            className="shrink-0 lg:text-xs text-[10px]  font-semibold tracking-wide uppercase
                        px-4 py-2 rounded-xl border border-white/15
                        bg-white/5 hover:bg-white/10 text-gray-300
                        hover:text-white transition-all duration-200"
-        >
-          Edit Profile
-        </button>
+          >
+            Edit Profile
+          </button>
+        </Link>
       </div>
 
       {/* divider */}
-      <div className="w-full h-px bg-white/10 my-5" />
+      <div className="w-full h-px bg-white/10 my-6" />
 
       {/* stats */}
       <div className="grid grid-cols-3 gap-3 mt-10">
@@ -80,10 +88,10 @@ const ProfileDetails = () => {
                    hover:bg-white/10 hover:border-white/20
                    transition-all duration-200"
           >
-            <p className="text-[10px] text-gray-400 uppercase tracking-widest font-medium">
+            <p className="lg:text-xs text-[8px] text-gray-400 uppercase tracking-widest font-medium">
               {data.top}
             </p>
-            <p className="text-lg font-black text-white leading-none">
+            <p className="lg:text-xs text-[16px] font-black text-white leading-none">
               {data.bottom}
             </p>
           </div>

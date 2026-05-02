@@ -51,7 +51,7 @@ const LocationTemp = ({ loading, SkeletonTemp }) => {
             </div>
 
             {/* RIGHT INFO */}
-            <div className="flex  min-h-40 flex-col gap-3 lg:mt-26 bg-white/10 backdrop-blur-xl border border-white/10 px-6 py-5 rounded-3xl shadow-2xl">
+            <div className="flex  max-h-fit flex-col gap-3 lg:mt-26 bg-white/10 backdrop-blur-xl border border-white/10 px-6 py-5 rounded-3xl shadow-2xl">
               <p className="text-amber-400 text-3xl lg:text-4xl capitalize font-bold">
                 {current.weather?.[0]?.description}
               </p>
