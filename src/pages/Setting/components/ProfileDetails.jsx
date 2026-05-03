@@ -1,12 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useProfile } from "../../../context/ProfileContext";
+// import { useAuth } from "../../../context/LoginContext";
+
 const ProfileDetails = () => {
-  const { form, setForm, avatar, setAvatar, initials } = useProfile();
+  const { form, avatar, initials } = useProfile();
+  // const { currentUser } = useAuth();
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  const isLocked = !currentUser;
+
   const UserData = [
     {
       top: "Location",
-      bottom: ` ${form.location || "__"}`,
+      bottom: form.location || "__",
     },
     {
       top: "Joined",
@@ -17,42 +24,34 @@ const ProfileDetails = () => {
       bottom: "3 Active",
     },
   ];
+
   return (
-    <div
-      className="w-full max-w-[750px] min-h-[300px] p-3 sm:p-8 rounded-3xl 
-                bg-white/5 backdrop-blur-2xl border border-white/10
-                shadow-2xl shadow-black/20"
-    >
-      {/* header */}
-      <div className="flex items-center justify-between gap-4">
+    <div className="relative w-full max-w-[750px] min-h-[300px] p-3 sm:p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/20">
+      {/* LOCK OVERLAY */}
+      {isLocked && (
+        <div className="absolute inset-0 rounded-3xl bg-black/50 backdrop-blur-md flex items-center justify-center z-20">
+          <div className="text-center text-white">
+            <p className="text-lg font-semibold">Profile Locked</p>
+            <p className="text-sm text-white/60 mt-1">
+              Please login to view and edit your profile
+            </p>
+            <Link to="/Login">
+              <button className="mt-4 px-4 py-2 rounded-xl bg-purple-500/30 border border-purple-400/30 hover:bg-purple-500/40 transition">
+                Login
+              </button>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* HEADER */}
+      <div
+        className={`flex items-center justify-between gap-4 ${isLocked ? "opacity-40" : ""}`}
+      >
         <div className="flex gap-4 items-center">
-          {/* avatar */}
+          {/* AVATAR */}
           <div className="relative shrink-0">
-            <div
-              className="
-                w-[80px] h-[80px]
-                sm:w-[100px] sm:h-[100px]
-                xl:w-[115px] xl:h-[115px]
-
-                rounded-full
-                overflow-hidden
-
-                bg-gradient-to-br
-                from-blue-400/15
-                to-purple-500/15
-
-                border border-white/10
-
-                flex items-center justify-center
-
-                text-white/90
-                text-[1.8rem]
-                font-black
-
-                transition-transform duration-200
-                group-hover:scale-[1.03]
-              "
-            >
+            <div className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] xl:w-[115px] xl:h-[115px] rounded-full overflow-hidden bg-gradient-to-br from-blue-400/15 to-purple-500/15 border border-white/10 flex items-center justify-center text-white/90 text-[1.8rem] font-black">
               {avatar ? (
                 <img
                   src={avatar}
@@ -63,62 +62,58 @@ const ProfileDetails = () => {
                 initials
               )}
             </div>
-            {/* online dot */}
-            {/* className="w-18 h-18 lg:w-22 lg:h-22 rounded-2xl object-cover border
-            border-white/20" */}
-            <span
-              className="absolute bottom-2.5 right-2.5 lg:w-2.5 lg:h-2.5 w-2 h-2 rounded-full
-                         bg-emerald-400 border-2 border-white/20"
-            />
+
+            <span className="absolute bottom-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white/20" />
           </div>
 
+          {/* INFO */}
           <div>
-            <h1 className="text-white text-md lg:text-2xl font-bold tracking-wide leading-tight">
-              {form.name || "__"}
+            <h1 className="text-white text-md lg:text-2xl font-bold">
+              {form.name || currentUser?.name || "—"}
             </h1>
-            <p className="text-gray-400 text-[10px] lg:xs mt-0.5 tracking-wide">
-              {form.email || "__"}
+            <p className="text-gray-400 text-xs mt-1">
+              {currentUser?.email || "__"}
             </p>
-            {/* badge */}
-            <span
-              className="inline-block mt-2 lg:text-xs text-[9px] font-semibold tracking-widest uppercase
-                         bg-indigo-500/20 text-indigo-300 border border-indigo-400/30
-                         px-2.5 py-0.5 rounded-full"
-            >
+
+            <span className="inline-block mt-2 text-[9px] lg:text-xs font-semibold uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 px-2.5 py-0.5 rounded-full">
               Pro Member
             </span>
           </div>
         </div>
-        <Link to={"./profile"}>
+
+        {/* EDIT BUTTON */}
+        {currentUser ? (
+          <Link to="/profile">
+            <button className="text-xs font-semibold px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition">
+              Edit Profile
+            </button>
+          </Link>
+        ) : (
           <button
-            className="shrink-0 lg:text-xs text-[10px]  font-semibold tracking-wide uppercase
-                       px-4 py-2 rounded-xl border border-white/15
-                       bg-white/5 hover:bg-white/10 text-gray-300
-                       hover:text-white transition-all duration-200"
+            disabled
+            className="text-xs font-semibold px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-gray-500 cursor-not-allowed"
           >
-            Edit Profile
+            Locked
           </button>
-        </Link>
+        )}
       </div>
 
-      {/* divider */}
+      {/* DIVIDER */}
       <div className="w-full h-px bg-white/10 my-6" />
 
-      {/* stats */}
-      <div className="grid grid-cols-3 gap-3 mt-10">
+      {/* STATS */}
+      <div
+        className={`grid grid-cols-3 gap-3 mt-10 ${isLocked ? "opacity-40" : ""}`}
+      >
         {UserData.map((data, index) => (
           <div
             key={index}
-            className="flex flex-col items-center justify-center gap-1
-                   p-4 rounded-2xl
-                   bg-white/5 border border-white/10
-                   hover:bg-white/10 hover:border-white/20
-                   transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1 p-4 rounded-2xl bg-white/5 border border-white/10"
           >
-            <p className="lg:text-xs text-[8px] text-gray-400 uppercase tracking-widest font-medium">
+            <p className="text-[8px] lg:text-xs text-gray-400 uppercase tracking-widest font-medium">
               {data.top}
             </p>
-            <p className="lg:text-xs text-[16px] font-black text-white leading-none">
+            <p className="text-[16px] lg:text-xs font-black text-white">
               {data.bottom}
             </p>
           </div>

@@ -89,7 +89,16 @@ const SearchContext = createContext(null);
 
 export const SearchContextProvider = ({ children }) => {
   const { loadWeather } = useWeather();
-  const [recentCities, setRecentCities] = useState([]);
+  const [recentCities, setRecentCities] = useState(() => {
+    const savedCities = JSON.parse(localStorage.getItem("recentCities")) || [];
+
+    return savedCities.filter(
+      (city) =>
+        city?.name &&
+        typeof city.lat === "number" &&
+        typeof city.lon === "number",
+    );
+  });
   const [query, setQueryRaw] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
@@ -200,6 +209,9 @@ export const SearchContextProvider = ({ children }) => {
     },
     [clearSuggestions, loadWeather],
   );
+  useEffect(() => {
+    localStorage.setItem("recentCities", JSON.stringify(recentCities));
+  }, [recentCities]);
 
   return (
     <SearchContext.Provider

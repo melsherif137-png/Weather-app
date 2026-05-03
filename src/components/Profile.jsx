@@ -15,8 +15,11 @@ import {
   Wind,
   Droplets,
   Clock,
+  LogOut,
 } from "lucide-react";
 import { useProfile } from "../context/ProfileContext";
+import { useAuth } from "../context/LoginContext";
+import { useNavigate } from "react-router-dom";
 // ─── constants ────────────────────────────────────────────
 
 // ─── Weather Widget ───────────────────────────────────────
@@ -145,6 +148,9 @@ const Profile = () => {
     FloatingField,
     initials,
   } = useProfile();
+  const { logout, updateCurrentUser } = useAuth();
+  const navigate = useNavigate();
+  const [isEdited, setIsEdited] = useState("");
 
   const temp = Math.round(current?.main?.temp ?? 28);
   const city = current?.name ?? "Cairo, EG";
@@ -163,14 +169,31 @@ const Profile = () => {
     [],
   );
 
+  const handleLogout = () => {
+    logout();
+
+    // remove saved profile data
+    localStorage.removeItem("profile-avatar");
+    localStorage.removeItem("profile-form");
+
+    // reset states
+    setAvatar("");
+
+    setForm({
+      name: "",
+      email: "",
+      location: "",
+      phone: "",
+    });
+
+    navigate("/Login");
+  };
   const handleSave = () => {
+    updateCurrentUser(form);
+
     setSaved(true);
 
-    clearTimeout(timerRef.current);
-
-    timerRef.current = setTimeout(() => {
-      setSaved(false);
-    }, 2200);
+    setTimeout(() => setSaved(false), 2000);
   };
 
   const handleImg = (e) => {
@@ -188,6 +211,7 @@ const Profile = () => {
 
     reader.readAsDataURL(file);
   };
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   return (
     <div
@@ -329,7 +353,7 @@ const Profile = () => {
               leading-tight
             "
           >
-            {form.name || "—"}
+            {form.name || currentUser?.name || "—"}
           </h2>
 
           <p className="text-white/40 text-sm mt-2 mb-7">
@@ -379,6 +403,15 @@ const Profile = () => {
               </div>
             ))}
           </div>
+          <button
+            className="flex justify-center items-center gap-3 cursor-pointer bg-white/10 backdrop-blur-3xl mt-8 min-w-full py-4 rounded-3xl text-white font-bold text-xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-400 ease-in-out"
+            onClick={() => {
+              handleLogout();
+            }}
+          >
+            logout
+            <LogOut size={18} />
+          </button>
         </div>
 
         {/* WEATHER */}

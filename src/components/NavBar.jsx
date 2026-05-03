@@ -3,10 +3,13 @@ import { Plus, Bell, Search } from "lucide-react";
 import { useWeather } from "../context/WeatherState";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useNotifications } from "../context/NotificationContext";
 
 const NavBar = ({ isOpen, setOpenModal }) => {
   const location = useLocation();
   const [search, setSearch] = useState("");
+  const [showNotifications, setShowNotifications] = useState(false);
+  const { alerts, hasAlerts } = useNotifications();
   const {
     weather,
     loading,
@@ -70,9 +73,43 @@ const NavBar = ({ isOpen, setOpenModal }) => {
         >
           <Plus className=" text-gray-400 " size={22} />
         </button>
-        <button className="bg-white/20 backdrop-blur-xl p-2 rounded-full hover:bg-white/30 transition-all cursor-pointer">
-          <Bell className=" text-gray-400" size={22} />
-        </button>
+        <div className="relative">
+          <button
+            className="relative bg-white/20 backdrop-blur-xl p-2 rounded-full hover:bg-white/30 transition-all cursor-pointer"
+            onClick={() => setShowNotifications((prev) => !prev)}
+          >
+            <Bell className=" text-gray-400" size={22} />
+            {hasAlerts && (
+              <span className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-[#111827]" />
+            )}
+          </button>
+
+          {showNotifications && (
+            <div className="absolute right-0 top-12 z-50 w-72 rounded-3xl border border-white/10 bg-black/80 p-4 text-white shadow-xl backdrop-blur-xl">
+              <p className="mb-3 text-sm font-semibold">Weather Alerts</p>
+
+              {alerts.length > 0 ? (
+                <div className="flex flex-col gap-2">
+                  {alerts.map((alert) => (
+                    <div
+                      key={alert.id}
+                      className="rounded-2xl border border-white/10 bg-white/5 p-3"
+                    >
+                      <p className="text-sm font-semibold text-red-200">
+                        {alert.title}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-300">
+                        {alert.message}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400">No active alerts</p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -9,6 +9,8 @@ import Footer from "../pages/Home/components/Footer";
 import Calender from "../pages/Calender/Calender";
 import Setting from "../pages/Setting/Setting";
 import Profile from "./Profile";
+import Login from "./Login";
+import SignUp from "./SignUp";
 const MainContent = ({
   isOpen,
   setIsOpen,
@@ -57,7 +59,9 @@ const MainContent = ({
         <Route path="/Location" element={<Location />} />
         <Route path="/Calender" element={<Calender />} />
         <Route path="/Setting" element={<Setting />} />
-        <Route path="/Setting/Profile" element={<Profile />} />
+        <Route path="/Profile" element={<Profile />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/SignUp" element={<SignUp />} />
       </Routes>
       <AddCity openModal={openModal} onClose={() => setOpenModal(false)} />
       <Footer />

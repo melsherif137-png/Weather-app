@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Notification from "./components/Notification";
 import ProfileDetails from "./components/ProfileDetails";
 import DownBar from "./components/DownBar";
 
 const Setting = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollTo !== "notifications") return;
+
+    document
+      .getElementById("notifications")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [location.state]);
+
   return (
     <div
       className={`content

@@ -4,15 +4,19 @@ import {
   Search,
   MapPin,
   Settings,
+  LogIn,
   Cloudy,
+  CircleUser,
   ChevronLeft,
   Menu,
   X,
 } from "lucide-react";
+import { useAuth } from "../context/LoginContext";
 import { NavLink } from "react-router-dom";
-import { Link } from "react-router-dom";
-
+import { useProfile } from "../context/ProfileContext";
 const Silder = ({ isOpen, setIsOpen }) => {
+  const { handleClick } = useAuth();
+  const { avatar } = useProfile();
   const menuItems = [
     { id: 1, title: "Home", icon: Home, path: "/home" },
     { id: 2, title: "Search", icon: Search, path: "/search" },
@@ -141,12 +145,41 @@ const Silder = ({ isOpen, setIsOpen }) => {
           </nav>
 
           {/* FOOTER */}
-          <div className="mt-auto h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-            {isOpen ? (
-              <span className="text-white text-sm">Weather App</span>
-            ) : (
-              <Cloudy className="w-5 h-5 text-white" />
-            )}
+          <div
+            className="
+    mt-auto
+    w-15
+    h-15
+    rounded-full
+    border border-white/10
+    flex items-center justify-center
+    cursor-pointer
+    relative overflow-hidden
+  "
+            onClick={handleClick}
+            style={
+              avatar
+                ? {
+                    backgroundImage: `url(${avatar})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }
+                : {
+                    background: "rgba(255,255,255,0.05)",
+                  }
+            }
+          >
+            {/* overlay */}
+            <div className="absolute inset-0 bg-black/5" />
+
+            <button>
+              {!avatar &&
+                (isOpen ? (
+                  <span className="text-white text-sm z-10">Login</span>
+                ) : (
+                  <CircleUser className="w-6 h-6 text-white z-10" />
+                ))}
+            </button>
           </div>
         </div>
       </aside>

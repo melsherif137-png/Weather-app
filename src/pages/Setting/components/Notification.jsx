@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { AlertTriangle, Sun, List } from "lucide-react";
+import { useNotifications } from "../../../context/NotificationContext";
 
 const notifications = [
   {
@@ -54,20 +55,14 @@ const Toggle = ({ checked, onChange, disabled }) => (
 );
 
 const Notification = () => {
-  const [masterOn, setMasterOn] = useState(true);
-  const [states, setStates] = useState({ 0: true, 1: true, 2: true });
-
-  const handleMaster = (val) => {
-    setMasterOn(val);
-    setStates({ 0: val, 1: val, 2: val });
-  };
-
-  const handleItem = (id, val) => {
-    setStates((prev) => ({ ...prev, [id]: val }));
-  };
+  const { settings, setMasterOn, setNotificationState } = useNotifications();
+  const { masterOn, states } = settings;
 
   return (
-    <div className="p-4 bg-white/5 backdrop-blur-3xl rounded-3xl">
+    <div
+      id="notifications"
+      className="p-4 bg-white/5 backdrop-blur-3xl rounded-3xl"
+    >
       {/* Master row */}
       <div
         className="
@@ -101,7 +96,7 @@ const Notification = () => {
           >
             {masterOn ? "Enabled" : "Disabled"}
           </span>
-          <Toggle checked={masterOn} onChange={handleMaster} />
+          <Toggle checked={masterOn} onChange={setMasterOn} />
         </div>
       </div>
 
@@ -153,7 +148,7 @@ const Notification = () => {
                   </span>
                   <Toggle
                     checked={isOn}
-                    onChange={(val) => handleItem(id, val)}
+                    onChange={(val) => setNotificationState(id, val)}
                     disabled={!masterOn}
                   />
                 </div>

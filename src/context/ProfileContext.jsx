@@ -19,7 +19,7 @@ import {
   Droplets,
   Clock,
 } from "lucide-react";
-
+import { useAuth } from "./LoginContext";
 const ProfileState = createContext();
 
 const WEATHER_MAP = [
@@ -71,9 +71,9 @@ const getWeather = (temp) =>
   WEATHER_MAP.find((w) => temp >= w.min) ?? WEATHER_MAP.at(-1);
 
 const INITIAL_FORM = {
-  name: "Alex River",
-  location: "Reykjavík, Iceland",
-  email: "alex.river@aether-observer.io",
+  name: "your name",
+  location: "Your Location",
+  email: "a.g@gmail.com",
   phone: "+354 555 0124",
 };
 
@@ -150,6 +150,8 @@ const FloatingField = ({
 );
 
 const ProfileContextProvider = ({ children }) => {
+  const { name } = useAuth();
+
   // profile details
   const [form, setForm] = useState(() => {
     const savedForm = localStorage.getItem("profile-form");
