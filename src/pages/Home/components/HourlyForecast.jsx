@@ -6,7 +6,7 @@ const HourlyForecast = () => {
   const { forecast } = useWeather();
 
   return (
-    <div className="mt-8 text-white bg-white/10 backdrop-blur-md rounded-3xl p-5 mx-6 my-10 flex flex-col h-100">
+    <div className="mt-8 text-white bg-white/10 backdrop-blur-md rounded-3xl max-h-fit p-5 mx-6 my-10 flex flex-col h-100">
       {/* Header */}
       <div className="mb-4">
         <h2 className="text-xl font-bold">Hourly Forecast</h2>
@@ -25,7 +25,7 @@ const HourlyForecast = () => {
       </div>
 
       {/* Scroll Container */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 overflow-x-auto pb-2 scrollbar-hide mt-auto">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 overflow-x-auto pb-2 scrollbar-hide mt-3">
         {forecast?.list?.slice(0, 8).map((item, index) => (
           <motion.div
             key={index}

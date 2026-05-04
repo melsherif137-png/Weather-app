@@ -1,13 +1,10 @@
-import { useState } from "react";
-import AddCity from "../../components/AddCity";
-import Footer from "./components/Footer";
+import FiveDayForecast from "./components/FiveDayForecast";
 import HourlyForecast from "./components/HourlyForecast";
-import NavBar from "../../components/NavBar";
 import WeatherDetails from "./components/WeatherDetails";
 import WeatherGridDetails from "./components/WeatherGridDetails";
 import OtherCity from "./OtherCity";
 
-const Content = ({ isOpen, getCurrentWeather, openModal, setOpenModal }) => {
+const Content = ({ getCurrentWeather }) => {
   return (
     <div
       className={`content
@@ -30,6 +27,7 @@ const Content = ({ isOpen, getCurrentWeather, openModal, setOpenModal }) => {
           <OtherCity />
         </div>
       </div>
+      <FiveDayForecast />
       {/* <Footer /> */}
     </div>
   );
