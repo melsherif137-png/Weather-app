@@ -2,7 +2,7 @@ import React from "react";
 import { useSearch } from "../../../context/SearchContext";
 import { useNavigate } from "react-router-dom";
 import { MapPin, Thermometer, Wind } from "lucide-react";
-
+import { motion } from "framer-motion";
 const RecentGrid = () => {
   const { recentCities, selectSuggestion } = useSearch();
   const navigate = useNavigate();
@@ -14,7 +14,17 @@ const RecentGrid = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 mt-8">
+    <motion.div
+      className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 mt-8 "
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.35,
+        ease: [0.25, 0.1, 0.25, 1],
+        delay: 0.2,
+      }}
+      viewport={{ once: false, amount: 0.1 }}
+    >
       {recentCities.map((city, index) => (
         <div
           key={`${city.name}-${city.lat}-${city.lon}`}
@@ -62,7 +72,7 @@ const RecentGrid = () => {
           </p>
         </div>
       ))}
-    </div>
+    </motion.div>
   );
 };
 

@@ -17,7 +17,7 @@ const Content = ({ isOpen, getCurrentWeather, openModal, setOpenModal }) => {
       flex flex-col
       min-h-screen
       w-full
-      
+      overflow-x-hidden
       transition-all duration-300 ease-in-out overflow-hidden`}
     >
       <div className="content-details flex flex-col md:flex-col lg:flex-row overflow-y-auto">

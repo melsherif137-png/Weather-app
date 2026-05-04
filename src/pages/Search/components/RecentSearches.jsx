@@ -13,9 +13,10 @@ const RecentSearches = () => {
   return (
     <div
       className="
-      min-h-screen
-      overflow-hidden
+        max-h-screen
+        overflow-hidden
         text-white mt-6
+        lg:mx-7 md:mx-4 mx-0
         px-4 sm:px-5 lg:px-8
         py-5 sm:py-6
         rounded-[28px]

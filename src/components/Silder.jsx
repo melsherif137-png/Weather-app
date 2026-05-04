@@ -11,6 +11,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import { useAuth } from "../context/LoginContext";
 import { NavLink } from "react-router-dom";
 import { useProfile } from "../context/ProfileContext";
@@ -24,6 +25,12 @@ const Silder = ({ isOpen, setIsOpen }) => {
     { id: 4, title: "Calender", icon: CalendarDays, path: "/Calender" },
     { id: 5, title: "Settings", icon: Settings, path: "/setting" },
   ];
+  const smooth = {
+    type: "spring",
+    stiffness: 120,
+    damping: 18,
+    mass: 0.8,
+  };
 
   return (
     <>
@@ -76,10 +83,13 @@ const Silder = ({ isOpen, setIsOpen }) => {
       </div>
 
       {/* ================= DESKTOP SIDEBAR ================= */}
-      <aside
+      <motion.aside
         className={`hidden lg:block md:block fixed left-2 top-[2.5dvh] h-[95dvh] ${
           isOpen ? "w-64" : "w-20"
         } bg-white/10 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl shadow-black/20 z-50 overflow-hidden transition-all duration-300`}
+        initial={{ opacity: 0, x: -35 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <div className="flex h-full flex-col py-4 px-2">
           {/* LOGO */}
@@ -148,13 +158,13 @@ const Silder = ({ isOpen, setIsOpen }) => {
           <div
             className="
     mt-auto
-    w-15
+    w-full
     h-15
     rounded-full
     border border-white/10
     flex items-center justify-center
     cursor-pointer
-    relative overflow-hidden
+    relative 
   "
             onClick={handleClick}
             style={
@@ -169,20 +179,25 @@ const Silder = ({ isOpen, setIsOpen }) => {
                   }
             }
           >
-            {/* overlay */}
+            <span
+              className={`font-bold text-lg text-white whitespace-nowrap overflow-hidden transition-all duration-300 ${
+                isOpen ? "opacity-100 max-w-[140px]" : "opacity-0 max-w-0"
+              }`}
+            >
+              my profile
+            </span>
             <div className="absolute inset-0 bg-black/5" />
-
             <button>
               {!avatar &&
                 (isOpen ? (
-                  <span className="text-white text-sm z-10">Login</span>
+                  <span className="text-white text-sm z-10"></span>
                 ) : (
                   <CircleUser className="w-6 h-6 text-white z-10" />
                 ))}
             </button>
           </div>
         </div>
-      </aside>
+      </motion.aside>
     </>
   );
 };

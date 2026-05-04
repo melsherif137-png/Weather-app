@@ -1,6 +1,7 @@
 import React from "react";
 import Input from "./components/Input";
 import RecentSearches from "./components/RecentSearches";
+import SearchPageFooterWidget from "./components/SearchWightFooter";
 
 const Search = () => {
   return (
@@ -17,6 +18,7 @@ const Search = () => {
     >
       <Input />
       <RecentSearches />
+      <SearchPageFooterWidget />
     </div>
   );
 };

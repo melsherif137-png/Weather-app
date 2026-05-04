@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import {
   Droplets,
   Wind,
@@ -10,6 +11,28 @@ import {
   Activity,
 } from "lucide-react";
 import { useWeather } from "../../../context/WeatherState";
+
+const rowVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 const LocationGrid = ({ loading, SkeletonGrid }) => {
   const { current } = useWeather();
@@ -74,63 +97,61 @@ const LocationGrid = ({ loading, SkeletonGrid }) => {
     },
   ];
 
+  // تقسيم rows (4 عناصر لكل صف)
+  const rows = [];
+  for (let i = 0; i < items.length; i += 4) {
+    rows.push(items.slice(i, i + 4));
+  }
+
   return (
     <div className="mt-8 lg:p-6 md:p-5 p-2">
       {loading ? (
         <SkeletonGrid />
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {items.map((item, index) => (
-            <div
-              key={index}
-              className="
-              bg-white/8
-              backdrop-blur-2xl
-              border border-white/10
-              rounded-2xl
-              px-4 py-4
-              hover:bg-white/12
-              hover:border-white/20
-              transition-all duration-300
-              group
-            "
+        <div className="flex flex-col gap-4">
+          {rows.map((row, rowIndex) => (
+            <motion.div
+              key={rowIndex}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3"
+              variants={rowVariants}
+              initial="hidden"
+              whileInView="show"
+              transition={{
+                delayChildren: rowIndex * 0.15,
+              }}
             >
-              <div className="flex items-start justify-between">
-                {/* LEFT */}
-                <div className="flex flex-col gap-3">
-                  <span className="text-gray-400 text-sm font-medium tracking-wide">
-                    {item.title}
-                  </span>
-
-                  <h2 className="text-white text-2xl font-bold">
-                    {item.value}
-                  </h2>
-                </div>
-
-                {/* ICON */}
-                <div
-                  className={`
-                  w-10 h-10 rounded-xl flex items-center justify-center
-                  ${item.bg}
-                  ${item.color}
-                  group-hover:scale-110
-                  transition-all duration-300
-                `}
+              {row.map((item, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  className="bg-white/8 backdrop-blur-2xl border border-white/10 rounded-2xl px-4 py-4"
                 >
-                  {item.icon}
-                </div>
-              </div>
+                  <div className="flex items-start justify-between">
+                    <div className="flex flex-col gap-3">
+                      <span className="text-gray-400 text-sm font-medium">
+                        {item.title}
+                      </span>
+                      <h2 className="text-white text-2xl font-bold">
+                        {item.value}
+                      </h2>
+                    </div>
 
-              {/* LINE */}
-              <div className="w-full h-[1px] bg-white/10 my-3" />
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.bg} ${item.color}`}
+                    >
+                      {item.icon}
+                    </div>
+                  </div>
 
-              {/* FOOTER */}
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] text-white">Live Data</span>
+                  <div className="w-full h-[1px] bg-white/10 my-3" />
 
-                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              </div>
-            </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-white">Live Data</span>
+                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
           ))}
         </div>
       )}
@@ -139,56 +160,3 @@ const LocationGrid = ({ loading, SkeletonGrid }) => {
 };
 
 export default LocationGrid;
-
-// {/* <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-//   {items.map((item, index) => (
-//     <div
-//       key={index}
-//       className="
-//               bg-white/8
-//               backdrop-blur-2xl
-//               border border-white/10
-//               rounded-2xl
-//               px-4 py-4
-//               hover:bg-white/12
-//               hover:border-white/20
-//               transition-all duration-300
-//               group
-//             "
-//     >
-//       <div className="flex items-start justify-between">
-//         {/* LEFT */}
-//         <div className="flex flex-col gap-3">
-//           <span className="text-gray-400 text-sm font-medium tracking-wide">
-//             {item.title}
-//           </span>
-
-//           <h2 className="text-white text-2xl font-bold">{item.value}</h2>
-//         </div>
-
-//         {/* ICON */}
-//         <div
-//           className={`
-//                   w-10 h-10 rounded-xl flex items-center justify-center
-//                   ${item.bg}
-//                   ${item.color}
-//                   group-hover:scale-110
-//                   transition-all duration-300
-//                 `}
-//         >
-//           {item.icon}
-//         </div>
-//       </div>
-
-//       {/* LINE */}
-//       <div className="w-full h-[1px] bg-white/10 my-3" />
-
-//       {/* FOOTER */}
-//       <div className="flex items-center justify-between">
-//         <span className="text-[11px] text-white">Live Data</span>
-
-//         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-//       </div>
-//     </div>
-//   ))}
-// </div>; */}

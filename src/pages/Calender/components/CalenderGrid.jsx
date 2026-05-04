@@ -1,6 +1,6 @@
 import React from "react";
 import { Sun, Cloud, CloudRain, CloudSnow, CloudLightning } from "lucide-react";
-
+import { motion } from "framer-motion";
 import { useWeather } from "../../../context/WeatherState";
 
 const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -70,6 +70,28 @@ const SkeletonBox = ({ className = "" }) => {
     <div className={`animate-pulse bg-white/10 rounded-xl ${className}`} />
   );
 };
+const rowVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 25, scale: 0.97 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 const WeatherCard = ({ dateObj, isToday, day, dayAbbr }) => {
   const dateNum = dateObj.getDate();
@@ -79,23 +101,31 @@ const WeatherCard = ({ dateObj, isToday, day, dayAbbr }) => {
   });
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{
+        duration: 0.45,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+      viewport={{ once: false, amount: 0.3 }}
       className={`
-        relative rounded-2xl p-3
-        flex flex-col items-center gap-2
-        border transition-all duration-300
-        cursor-default select-none
-        backdrop-blur-2xl overflow-hidden
-        min-h-[170px]
+    relative rounded-2xl p-3
+    flex flex-col items-center gap-2
+    border
+    cursor-default select-none
+    backdrop-blur-lg overflow-hidden
+    min-h-[170px]
+    transition-transform duration-300
 
-        ${
-          isToday
-            ? "bg-gradient-to-b from-indigo-600/35 to-purple-700/20 border-indigo-400/70 shadow-lg shadow-indigo-500/20 scale-[1.04] z-10"
-            : day
-              ? `bg-gradient-to-b ${getWeatherBg(day.maxTemp)} border-white/10 hover:border-white/20 hover:scale-[1.02]`
-              : "bg-white/[0.03] border-white/5"
-        }
-      `}
+    ${
+      isToday
+        ? "bg-gradient-to-b from-indigo-600/35 to-purple-700/20 border-indigo-400/70 shadow-lg shadow-indigo-500/20 scale-[1.04] z-10"
+        : day
+          ? `bg-gradient-to-b ${getWeatherBg(day.maxTemp)} border-white/10 hover:border-white/20 hover:scale-[1.02]`
+          : "bg-white/[0.03] border-white/5"
+    }
+  `}
     >
       {/* Today Badge */}
       {isToday && (
@@ -174,7 +204,7 @@ const WeatherCard = ({ dateObj, isToday, day, dayAbbr }) => {
           </div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 };
 

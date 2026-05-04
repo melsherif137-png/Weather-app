@@ -1,9 +1,51 @@
 import { Droplets, Wind, Navigation, Gauge } from "lucide-react";
 import { useWeather } from "../../../context/WeatherState";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+
+function useCountUp(target, duration = 1000) {
+  const [value, setValue] = useState(0);
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof target !== "number") {
+      setValue(0);
+      return;
+    }
+
+    const easeOutQuad = (t) => 1 - (1 - t) ** 2;
+    const startTime = performance.now();
+
+    const tick = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      setValue(easeOutQuad(progress) * target);
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    };
+
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [target, duration]);
+
+  return value;
+}
+
+const AnimatedNumber = ({ value, decimals = 0 }) => {
+  const animated = useCountUp(value, 1000, 800);
+
+  if (typeof value !== "number") return <span>--</span>;
+
+  return <span>{animated.toFixed(decimals)}</span>;
+};
 
 const getWindDirectionLabel = (deg) => {
   if (typeof deg !== "number") return "Unavailable";
-
   const directions = [
     "North",
     "North East",
@@ -14,16 +56,9 @@ const getWindDirectionLabel = (deg) => {
     "West",
     "North West",
   ];
-
   const normalized = ((deg % 360) + 360) % 360;
   const index = Math.round(normalized / 45) % directions.length;
-
   return directions[index];
-};
-
-const formatValue = (value, suffix = "") => {
-  if (value === null || value === undefined || value === "--") return "--";
-  return `${Math.round(value * 10) / 10}${suffix}`;
 };
 
 const WeatherGridDetails = () => {
@@ -32,22 +67,28 @@ const WeatherGridDetails = () => {
   const weatherData = [
     {
       title: "Humidity",
-      value: formatValue(gridDetails?.humidity, "%"),
+      value: gridDetails?.humidity ?? null,
+      suffix: "%",
+      decimals: 0,
       desc:
-        gridDetails?.dewPoint === "--" || gridDetails?.dewPoint === undefined
-          ? "Dew point is unavailable right now"
-          : `Dew point ${formatValue(gridDetails?.dewPoint, "°")}`,
+        typeof gridDetails?.dewPoint === "number"
+          ? `Dew point ${Math.round(gridDetails.dewPoint)}°`
+          : "Dew point is unavailable right now",
       icon: Droplets,
     },
     {
       title: "Wind",
-      value: formatValue(gridDetails?.windSpeed, " km/h"),
+      value: gridDetails?.windSpeed ?? null,
+      suffix: " km/h",
+      decimals: 1,
       desc: `From ${getWindDirectionLabel(gridDetails?.windDirection)}`,
       icon: Wind,
     },
     {
       title: "Wind Direction",
-      value: getWindDirectionLabel(gridDetails?.windDirection),
+      value: gridDetails?.windDirection ?? null,
+      suffix: "°",
+      decimals: 0,
       desc:
         typeof gridDetails?.windDirection === "number"
           ? `${Math.round(gridDetails.windDirection)}° heading`
@@ -57,7 +98,9 @@ const WeatherGridDetails = () => {
     },
     {
       title: "Pressure",
-      value: formatValue(gridDetails?.pressure, " mb"),
+      value: gridDetails?.pressure ?? null,
+      suffix: " mb",
+      decimals: 0,
       desc: "Current atmospheric pressure",
       icon: Gauge,
     },
@@ -72,28 +115,27 @@ const WeatherGridDetails = () => {
                 key={index}
                 className="relative overflow-hidden min-h-44 rounded-3xl bg-white/10 p-5 backdrop-blur-md"
               >
-                {/* Shimmer */}
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmerX" />
-                {/* Skeleton Content */}
                 <div className="mb-6 flex items-center justify-between">
-                  <div className="h-12 w-12 rounded-2xl bg-white/20"></div>
-                  <div className="h-4 w-20 rounded bg-white/20"></div>
+                  <div className="h-12 w-12 rounded-2xl bg-white/20" />
+                  <div className="h-4 w-20 rounded bg-white/20" />
                 </div>
-
                 <div className="space-y-3">
-                  <div className="h-8 w-24 rounded bg-white/20"></div>
-                  <div className="h-4 w-full rounded bg-white/20"></div>
-                  <div className="h-4 w-3/4 rounded bg-white/20"></div>
+                  <div className="h-8 w-24 rounded bg-white/20" />
+                  <div className="h-4 w-full rounded bg-white/20" />
+                  <div className="h-4 w-3/4 rounded bg-white/20" />
                 </div>
               </div>
             ))
-          : weatherData.map((item, index) => {
+          : weatherData.map((item) => {
               const Icon = item.icon;
-
               return (
-                <div
+                <motion.div
                   key={item.title}
-                  className="min-h-44 rounded-3xl border border-white/10 bg-white/10 p-5 text-white shadow-lg backdrop-blur-md transition-all duration-500 ease-out hover:-translate-y-1 hover:bg-white/15 animate-fadeInX"
+                  className="min-h-44 rounded-3xl border border-white/10 bg-white/10 p-5 text-white shadow-lg backdrop-blur-md transition-all duration-500 ease-out hover:-translate-y-1 hover:bg-white/15 overflow-hidden"
+                  initial={{ y: 175 }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
                 >
                   <div className="mb-6 flex items-center justify-between gap-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
@@ -108,22 +150,30 @@ const WeatherGridDetails = () => {
                         }}
                       />
                     </div>
-
                     <span className="text-sm font-medium text-white/70">
                       {item.title}
                     </span>
                   </div>
 
                   <div className="space-y-3">
-                    <h2 className="text-3xl font-bold tracking-tight">
-                      {item.value}
+                    <h2 className="text-4xl font-bold tracking-tight">
+                      {item.value === null ? (
+                        <span>--</span>
+                      ) : (
+                        <AnimatedNumber
+                          value={item.value}
+                          decimals={item.decimals}
+                        />
+                      )}
+                      <span className="text-xl ml-1 text-white/70">
+                        {item.value !== null ? item.suffix : ""}
+                      </span>
                     </h2>
-
                     <p className="text-sm leading-relaxed text-white/70">
                       {item.desc}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
       </div>

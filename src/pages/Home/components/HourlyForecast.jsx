@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { getForecast } from "../../../services/weatherService";
 import { useWeather } from "../../../context/WeatherState";
-
+import { motion } from "framer-motion";
 const HourlyForecast = () => {
   const { forecast } = useWeather();
 
@@ -10,17 +10,34 @@ const HourlyForecast = () => {
       {/* Header */}
       <div className="mb-4">
         <h2 className="text-xl font-bold">Hourly Forecast</h2>
-        <p className="text-purple-400 text-sm">
+        <motion.p
+          className="text-purple-400 lg:text-md md:text-md text-sm font-bold"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.35,
+            ease: [0.25, 0.1, 0.25, 1],
+          }}
+          viewport={{ amount: 0.3 }}
+        >
           Temperature trends for the next 24 hours
-        </p>
+        </motion.p>
       </div>
 
       {/* Scroll Container */}
       <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 overflow-x-auto pb-2 scrollbar-hide mt-auto">
         {forecast?.list?.slice(0, 8).map((item, index) => (
-          <div
+          <motion.div
             key={index}
             className="min-w-[90px] bg-white/10 rounded-2xl p-4 text-center flex-shrink-0"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.35,
+              ease: [0.25, 0.1, 0.25, 1],
+              delay: 0.1 * index,
+            }}
+            viewport={{ once: false, amount: 0.1 }}
           >
             <p className="text-sm text-white/70">
               {item.dt_txt.split(" ")[1].slice(0, 5)}
@@ -31,7 +48,7 @@ const HourlyForecast = () => {
             </p>
 
             <p className="text-xs text-white/60">{item.weather[0].main}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

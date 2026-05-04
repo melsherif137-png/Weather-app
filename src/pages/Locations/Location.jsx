@@ -9,7 +9,8 @@ import {
 } from "../../services/weatherService";
 import { useWeather } from "../../context/WeatherState";
 const Location = () => {
-  const { loading } = useWeather();
+  const { loading, locationLoading } = useWeather();
+  const isLoading = loading || locationLoading;
   // loading Skelton for Grid
   const SkeletonCard = () => {
     return (
@@ -46,9 +47,9 @@ const Location = () => {
   };
   return (
     <div className="content mt-13 lg:mt-0 md:mt-0 flex flex-col min-h-screen w-full transition-all duration-300 ease-in-out overflow-hidden">
-      <LocationTemp loading={loading} SkeletonTemp={SkeletonTemp} />
-      <LocationGrid loading={loading} SkeletonGrid={SkeletonGrid} />
-      <LocationDaily loading={loading} />
+      <LocationTemp loading={isLoading} SkeletonTemp={SkeletonTemp} />
+      <LocationGrid loading={isLoading} SkeletonGrid={SkeletonGrid} />
+      <LocationDaily loading={isLoading} />
     </div>
   );
 };

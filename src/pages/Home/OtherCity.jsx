@@ -4,6 +4,7 @@ import { CloudRainWind, CloudFog, CloudLightning } from "lucide-react";
 import { useWeather } from "../../context/WeatherState";
 import { getCityImage } from "../../services/weatherService";
 import AirQuality from "../Home/components/AirQuality";
+import { delay, motion } from "framer-motion";
 const OtherCity = () => {
   const { loading } = useWeather();
   const { nearbyCities } = useWeather();
@@ -21,16 +22,24 @@ const OtherCity = () => {
     "River Valley",
   ];
   return (
-    <div className="other mt-16 lg:mt-5">
+    <div className="other mt-16 lg:mt-5 overflow-hidden">
       <div className="wrapper flex flex-col w-full gap-2">
         {!loading
           ? nearbyCities.map((item, index) => {
               const Icon = icons[index] || CloudRainWind;
 
               return (
-                <div
+                <motion.div
                   key={index}
                   className="group relative w-full min-h-35 p-4 sm:p-6 flex justify-between items-center rounded-4xl text-white overflow-hidden cursor-pointer"
+                  initial={{ opacity: 0, x: 270 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{
+                    duration: 1,
+                    ease: [0.25, 0.1, 0.25, 1],
+                    delay: 0.2 * index,
+                  }}
+                  viewport={{ amount: 0.2, once: true }}
                 >
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-in-out group-hover:scale-110"
@@ -61,7 +70,7 @@ const OtherCity = () => {
                       {Math.round(item.main?.temp)}°
                     </h1>
                   </div>
-                </div>
+                </motion.div>
               );
             })
           : Array.from({ length: 4 }).map((_, index) => {

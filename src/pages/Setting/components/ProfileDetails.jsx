@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useProfile } from "../../../context/ProfileContext";
 // import { useAuth } from "../../../context/LoginContext";
+import { motion } from "framer-motion";
 
 const ProfileDetails = () => {
   const { form, avatar, initials } = useProfile();
@@ -26,7 +27,16 @@ const ProfileDetails = () => {
   ];
 
   return (
-    <div className="relative w-full max-w-[750px] min-h-[300px] p-3 sm:p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/20">
+    <motion.div
+      className="relative w-full max-w-[750px] min-h-[300px] p-3 sm:p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/20"
+      initial={{ opacity: 0, x: -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{
+        duration: 0.35,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+      viewport={{ once: false, amount: 0.1 }}
+    >
       {/* LOCK OVERLAY */}
       {isLocked && (
         <div className="absolute inset-0 rounded-3xl bg-black/50 backdrop-blur-md flex items-center justify-center z-20">
@@ -119,7 +129,7 @@ const ProfileDetails = () => {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

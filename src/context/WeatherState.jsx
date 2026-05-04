@@ -23,6 +23,24 @@ const isCoordinateSearch = (value) =>
     typeof value.lon === "number",
   );
 
+const validateWeatherResponse = (data) => {
+  if (!data?.coord || !data?.main || !data?.weather) {
+    throw new Error(data?.message || "Weather data is unavailable");
+  }
+};
+
+const validateForecastResponse = (data) => {
+  if (!Array.isArray(data?.list) || data.list.length === 0) {
+    throw new Error(data?.message || "Forecast data is unavailable");
+  }
+};
+
+const validateAirQualityResponse = (data) => {
+  if (!Array.isArray(data?.list) || data.list.length === 0) {
+    throw new Error("Air quality data is unavailable");
+  }
+};
+
 export const WeatherProvider = ({ children }) => {
   // =========================
   // SEARCH STATE
@@ -39,7 +57,8 @@ export const WeatherProvider = ({ children }) => {
   // =========================
   // GLOBAL STATE
   // =========================
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [locationLoading, setLocationLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // location temp
@@ -60,9 +79,11 @@ export const WeatherProvider = ({ children }) => {
       let lat, lon;
       let weatherData;
       let forecastData;
-      let detailsData = null;
-      let nearby = [];
-      let airData = null;
+      let detailsData;
+      let nearby;
+      let airData;
+      let calendarData;
+      let dailyData;
 
       // -------------------------
       // CASE 1: CITY NAME
@@ -70,6 +91,9 @@ export const WeatherProvider = ({ children }) => {
       if (typeof searchTarget === "string" && searchTarget.trim()) {
         weatherData = await getCurrentWeather(searchTarget);
         forecastData = await getForecast(searchTarget);
+
+        validateWeatherResponse(weatherData);
+        validateForecastResponse(forecastData);
 
         lat = weatherData.coord.lat;
         lon = weatherData.coord.lon;
@@ -87,6 +111,9 @@ export const WeatherProvider = ({ children }) => {
         weatherData = await getWeatherByCoords(lat, lon);
         forecastData = await getForecastByCoords(lat, lon);
 
+        validateWeatherResponse(weatherData);
+        validateForecastResponse(forecastData);
+
         setCity(searchTarget.name || weatherData.name);
       }
 
@@ -102,24 +129,41 @@ export const WeatherProvider = ({ children }) => {
         weatherData = await getWeatherByCoords(lat, lon);
         forecastData = await getForecastByCoords(lat, lon);
 
+        validateWeatherResponse(weatherData);
+        validateForecastResponse(forecastData);
+
         setCity(weatherData.name);
       }
 
       // =========================
       // COMMON DATA (ALL CASES)
       // =========================
-      nearby = await getNearbyWeather(lat, lon);
-      airData = await getAirQuality(lat, lon);
-      // locationWeather = await getWeatherByCoords(lat, lon)
+      [nearby, airData, detailsData, calendarData, dailyData] =
+        await Promise.all([
+          getNearbyWeather(lat, lon),
+          getAirQuality(lat, lon),
+          getWeatherDetailsByCoords(lat, lon),
+          getMonthlyForecast(lat, lon),
+          getDailyForecast(lat, lon),
+        ]);
 
-      try {
-        detailsData = await getWeatherDetailsByCoords(lat, lon);
-      } catch {
-        detailsData = null;
+      if (
+        !Array.isArray(nearby) ||
+        nearby.length === 0 ||
+        nearby.some((item) => !item?.main || !item?.weather)
+      ) {
+        throw new Error("Nearby cities data is unavailable");
       }
 
-      const calendarData = await getMonthlyForecast(lat, lon);
-      const dailyData = await getDailyForecast(lat, lon);
+      validateAirQualityResponse(airData);
+
+      if (
+        !detailsData ||
+        !Array.isArray(calendarData) ||
+        !Array.isArray(dailyData)
+      ) {
+        throw new Error("Some weather data is unavailable");
+      }
 
       // =========================
       // SET STATE (SEARCH)
@@ -130,12 +174,16 @@ export const WeatherProvider = ({ children }) => {
       setAirQuality(airData);
       setGridDetails(detailsData);
       setCalenderWeather(calendarData);
-      // setDailyLocaion(dailyData);
+      setLocationDaily(dailyData);
 
       // optional sync
     } catch (err) {
       console.log(err);
-      setError("Failed to load weather");
+      setError(
+        navigator.onLine
+          ? err.message || "Failed to load weather"
+          : "No internet connection",
+      );
     } finally {
       setLoading(false);
     }
@@ -144,7 +192,7 @@ export const WeatherProvider = ({ children }) => {
   useEffect(() => {
     const fetchLocation = async () => {
       try {
-        setLoading(true);
+        setLocationLoading(true);
 
         const location = await getUserLocation();
 
@@ -154,6 +202,7 @@ export const WeatherProvider = ({ children }) => {
         });
 
         const data = await getWeatherByCoords(location.lat, location.lon);
+        validateWeatherResponse(data);
         setCurrent(data);
         console.log(data);
 
@@ -165,7 +214,7 @@ export const WeatherProvider = ({ children }) => {
       } catch (error) {
         console.error("Failed to get location:", error.message);
       } finally {
-        setLoading(false);
+        setLocationLoading(false);
       }
     };
 
@@ -187,6 +236,7 @@ export const WeatherProvider = ({ children }) => {
         calenderWeather,
 
         loading,
+        locationLoading,
         error,
 
         loadWeather,

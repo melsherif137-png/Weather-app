@@ -1,5 +1,4 @@
 import React from "react";
-
 const Footer = () => {
   const links = ["Privacy", "Satellite Map", "API Resources"];
   return (

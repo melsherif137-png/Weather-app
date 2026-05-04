@@ -1,6 +1,6 @@
 import React from "react";
 import { Cloud, Lock, FileText, Info, Star } from "lucide-react";
-
+import { motion } from "framer-motion";
 const links = [
   {
     label: "Privacy Policy",
@@ -48,7 +48,7 @@ const DownBar = ({
   const handlers = { onPrivacy, onTerms, onAbout, onRate };
 
   return (
-    <div
+    <motion.div
       className="
         w-full rounded-3xl
         p-4 sm:p-5 lg:p-6
@@ -56,6 +56,14 @@ const DownBar = ({
         border border-white/10
         flex flex-col gap-5 mt-10
       "
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.35,
+        ease: [0.25, 0.1, 0.25, 1],
+        delay: 0.2,
+      }}
+      viewport={{ once: false, amount: 0.1 }}
     >
       {/* App info */}
       <div className="flex items-center justify-between gap-3">
@@ -203,7 +211,7 @@ const DownBar = ({
       >
         © 2025 {appName}. All rights reserved.
       </p>
-    </div>
+    </motion.div>
   );
 };
 

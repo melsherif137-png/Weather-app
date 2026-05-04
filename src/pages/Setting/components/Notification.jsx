@@ -1,7 +1,7 @@
 import React from "react";
 import { AlertTriangle, Sun, List } from "lucide-react";
 import { useNotifications } from "../../../context/NotificationContext";
-
+import { motion } from "framer-motion";
 const notifications = [
   {
     id: 0,
@@ -59,9 +59,17 @@ const Notification = () => {
   const { masterOn, states } = settings;
 
   return (
-    <div
+    <motion.div
       id="notifications"
       className="p-4 bg-white/5 backdrop-blur-3xl rounded-3xl"
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{
+        duration: 0.35,
+        ease: [0.25, 0.1, 0.25, 1],
+        delay: 0.1,
+      }}
+      viewport={{ once: false, amount: 0.1 }}
     >
       {/* Master row */}
       <div
@@ -157,7 +165,7 @@ const Notification = () => {
           },
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

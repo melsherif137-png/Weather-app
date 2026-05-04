@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Cloud } from "lucide-react";
 import { getWeatherByCoords } from "../../../services/weatherService";
 import { useWeather } from "../../../context/WeatherState";
+import { motion } from "framer-motion";
 const LocationTemp = ({ loading, SkeletonTemp }) => {
   const { current } = useWeather();
 
@@ -13,21 +14,50 @@ const LocationTemp = ({ loading, SkeletonTemp }) => {
       {loading ? (
         <SkeletonTemp />
       ) : (
-        <div className="flex flex-col md:flex-row lg:flex-row justify-between items-start gap-10 lg:mt-12 lg:p-6 md:p-6 p-2">
+        <motion.div className="flex flex-col md:flex-row lg:flex-row justify-between items-start gap-10 lg:mt-12 lg:p-6 md:p-6 p-2">
           {/* LEFT SIDE */}
           <div className="flex gap-6">
             <div className="flex flex-col">
-              <h2 className="text-white text-2xl lg:text-4xl font-semibold tracking-wide">
+              <motion.h2
+                className="text-white text-2xl lg:text-4xl font-semibold tracking-wide"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.35,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                viewport={{ once: true, amount: 0.1 }}
+              >
                 {current.name}, {current.sys?.country}
-              </h2>
+              </motion.h2>
 
-              <h1 className="text-white text-[90px] lg:text-[150px] font-bold leading-none drop-shadow-xl">
+              <motion.h1
+                className="text-white text-[90px] lg:text-[150px] font-bold leading-none drop-shadow-xl"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.35,
+                  ease: [0.25, 0.1, 0.25, 1],
+                  delay: 0.2,
+                }}
+                viewport={{ once: true, amount: 0.1 }}
+              >
                 {Math.round(current.main?.temp)}
                 <span className="text-amber-300">°</span>
-              </h1>
+              </motion.h1>
 
               {/* TIME */}
-              <div className="mt-15 flex items-start gap-3">
+              <motion.div
+                className="mt-15 flex items-start gap-3"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.35,
+                  ease: [0.25, 0.1, 0.25, 1],
+                  delay: 0.4,
+                }}
+                viewport={{ once: true, amount: 0.1 }}
+              >
                 <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse mt-2"></div>
 
                 <div className="flex flex-col">
@@ -47,11 +77,21 @@ const LocationTemp = ({ loading, SkeletonTemp }) => {
                     })}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* RIGHT INFO */}
-            <div className="flex  max-h-fit flex-col gap-3 lg:mt-26 bg-white/10 backdrop-blur-xl border border-white/10 px-6 py-5 rounded-3xl shadow-2xl">
+            <motion.div
+              className="flex  max-h-fit flex-col gap-3 lg:mt-26 bg-white/10 backdrop-blur-xl border border-white/10 px-6 py-5 rounded-3xl shadow-2xl"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.35,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: 0.6,
+              }}
+              viewport={{ once: true, amount: 0.1 }}
+            >
               <p className="text-amber-400 text-3xl lg:text-4xl capitalize font-bold">
                 {current.weather?.[0]?.description}
               </p>
@@ -69,10 +109,22 @@ const LocationTemp = ({ loading, SkeletonTemp }) => {
                   Live Weather Update
                 </span>
               </div>
-            </div>
+            </motion.div>
           </div>
           {/* WEATHER CARD */}
-          <div className="w-full lg:w-[560px] bg-white/10 backdrop-blur-2xl border border-white/10 rounded-[32px] p-10 flex flex-col items-center text-center shadow-xl shadow-black/40 hover:-translate-y-3 transition-all duration-300 cursor-pointer">
+          <motion.div
+            className="w-full lg:w-[560px] bg-white/10 backdrop-blur-xl border border-white/10 rounded-[32px] p-10 flex flex-col items-center text-center shadow-xl shadow-black/40 cursor-pointer overflow-hidden"
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              duration: 0.6,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 0.2,
+            }}
+            style={{
+              willChange: "transform, opacity",
+            }}
+          >
             <div className="mb-6 inline-flex items-center justify-center p-5 rounded-2xl bg-amber-400/20">
               <Cloud size={72} className="text-amber-400" />
             </div>
@@ -86,8 +138,8 @@ const LocationTemp = ({ loading, SkeletonTemp }) => {
             </p>
 
             <p className="text-gray-400 text-sm mt-5">Updated just now</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </>
   );

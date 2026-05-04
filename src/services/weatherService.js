@@ -205,6 +205,7 @@ export const getDailyForecast = async (lat, lon) => {
     return dailyForecast.slice(0, 6);
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -231,5 +232,6 @@ export const getMonthlyForecast = async (lat, lon) => {
     return forecast15Days;
   } catch (error) {
     console.log("Error fetching monthly forecast:", error);
+    throw error;
   }
 };
