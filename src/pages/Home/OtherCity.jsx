@@ -32,7 +32,7 @@ const OtherCity = () => {
                 <motion.div
                   key={index}
                   className="group relative w-full min-h-35 p-4 sm:p-6 flex justify-between items-center rounded-4xl text-white overflow-hidden cursor-pointer"
-                  initial={{ opacity: 0, x: 270 }}
+                  initial={{ opacity: 0, x: 200 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{
                     duration: 1,
