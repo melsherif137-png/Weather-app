@@ -70,17 +70,9 @@ const Login = () => {
       {currentUser ? (
         <LogoutButton />
       ) : (
-        <div
-          className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden"
-          style={{
-            backgroundImage: "url('/bg.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundAttachment: "fixed",
-          }}
-        >
+        <div className="min-h-screen flex items-center justify-center  relative overflow-hidden">
           {/* Card */}
-          <div className="relative z-10 w-full max-w-md lg:max-w-lg mb-20">
+          <div className="relative z-10 w-full max-w-md lg:max-w-lg lg:mb-20">
             <div
               className="rounded-3xl border border-white/10 p-8 md:p-10"
               style={{
