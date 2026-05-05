@@ -81,7 +81,7 @@ const ProfileDetails = () => {
             <h1 className="text-white text-md lg:text-2xl font-bold">
               {form.name || currentUser?.name || "—"}
             </h1>
-            <p className="text-gray-400 text-xs mt-1">
+            <p className="text-gray-300 text-xs mt-1 max-w-[180px] break-all">
               {currentUser?.email || "__"}
             </p>
 
@@ -123,7 +123,7 @@ const ProfileDetails = () => {
             <p className="text-[8px] lg:text-xs text-gray-400 uppercase tracking-widest font-medium">
               {data.top}
             </p>
-            <p className="text-[16px] lg:text-xs font-black text-white">
+            <p className="text-[12px] lg:text-xs font-black text-white">
               {data.bottom}
             </p>
           </div>

@@ -21,7 +21,7 @@ const NavBar = ({ isOpen, setOpenModal }) => {
   } = useWeather();
 
   return (
-    <div className="nav-bar w-full min-h-16 flex flex-wrap justify-between items-center gap-3 p-4 sm:px-8 ">
+    <div className="nav-bar w-full min-h-16 flex flex-wrap justify-between items-center gap-3 p-4 sm:px-8 relative z-10">
       {loading ? (
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse"></div>

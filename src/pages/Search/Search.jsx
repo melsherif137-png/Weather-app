@@ -14,7 +14,8 @@ const Search = () => {
       min-h-screen
       lg:p-6 md:p-4 p-4
       w-full
-      transition-all duration-300 ease-in-out overflow-hidden`}
+      transition-all duration-300 ease-in-out overflow-hidden
+      `}
     >
       <Input />
       <RecentSearches />

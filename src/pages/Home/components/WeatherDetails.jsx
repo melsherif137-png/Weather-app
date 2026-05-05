@@ -32,16 +32,16 @@ const WeatherDetails = () => {
     mass: 0.8,
   };
   return (
-    <div className="weather lg:mt-5 mt-5 p-6">
+    <div className="weather lg:mt-5 mt-5 p-6 ">
       <div className="container">
-        <div className="text-weather">
+        <div className="text-weather relative z-10">
           {loading ? (
             <div className="w-35 h-30 bg-white/30 rounded-2xl animate-pulse">
               {" "}
             </div>
           ) : (
             <motion.h1
-              className="text-[120px] md:text-[130px] lg:text-[150px] font-bold text-white leading-none"
+              className="  text-[120px] md:text-[130px] lg:text-[150px] font-bold text-white leading-none "
               initial={{ opacity: 0, y: 75 }}
               animate={{ opacity: 1, y: 0 }}
               transition={smooth}
@@ -93,7 +93,7 @@ const WeatherDetails = () => {
             )}
           </div>
         </div>
-        <div className="details-weather text-white flex items-center gap-2 text-xl lg:text-xl">
+        <div className="details-weather text-white flex items-center gap-2 text-xl lg:text-xl relative z-10">
           {loading ? (
             <div className="w-55 h-5 bg-white/30 rounded-2xl animate-pulse" />
           ) : (

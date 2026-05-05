@@ -33,7 +33,8 @@ const MainContent = ({
       w-full
       p-2 lg:p-6 
       overflow-y-auto
-      transition-all duration-300 ease-in-out overflow-hidden`}
+      transition-all duration-300 ease-in-out overflow-hidden
+      relative z-10`}
     >
       <NavBar isOpen={isOpen} setOpenModal={setOpenModal} />
       {error ? (

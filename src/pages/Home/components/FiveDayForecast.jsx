@@ -57,7 +57,7 @@ const FiveDayForecast = () => {
   const dailyForecast = getFiveDayForecast(forecast);
 
   return (
-    <section className="flex min-h-[200px] w-full flex-col px-6 py-8 text-white">
+    <section className="flex min-h-[200px] w-full flex-col px-6 py-8 text-white relative z-10">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold md:text-3xl">5-Day Forecast</h2>
